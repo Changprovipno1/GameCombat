@@ -8,8 +8,8 @@ public class PlayerStates : MonoBehaviour
     private float _lastAttackTime;
     private Player _player;
     private bool _isSilence;
-    [SerializeField] private WaveSpawner _waveSpawner;
     private PlayerAttack _playerAttack;
+    [SerializeField] private WaveSpawner _waveSpawner;
 
     void Awake()
     {

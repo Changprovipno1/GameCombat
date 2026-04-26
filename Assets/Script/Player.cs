@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
         if (_currentHp <= MinimumHp)
         {
             _currentHp = 0;
-            return;
+            // return; // dùng để chặn effect mở rộng
         }
     }
     private void Die()
