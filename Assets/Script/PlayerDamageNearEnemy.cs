@@ -11,13 +11,13 @@ public class PlayerDamageNearEnemy : MonoBehaviour
         _calculate = GetComponent<CalculateDistance>();
         if (_calculate == null)
         {
-            Debug.LogWarning("CalculateDistance is missing");
+            Debug.LogError("CalculateDistance is missing");
             enabled = false;
             return;
         }
         if (_waveSpawner == null)
         {
-            Debug.LogWarning("WaveSpawner is missing");
+            Debug.LogError("WaveSpawner is missing");
             enabled = false;
             return;
         }
