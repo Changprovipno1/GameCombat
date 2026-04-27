@@ -6,7 +6,6 @@ public class PlayerActionController : MonoBehaviour
     private PlayerAttack _playerAttack;
     private Player _player;
     [SerializeField] private WaveSpawner waveSpawner;
-    private IReadOnlyList<Enemy> enemies;
     [SerializeField] private Enemy _enemy;
     private PlayerStates _playerStates;
     private PlayerDamageNearEnemy _playerDamageNear;
@@ -24,13 +23,6 @@ public class PlayerActionController : MonoBehaviour
         if (waveSpawner == null)
         {
             Debug.LogError("WaveSpawner is missing");
-            enabled = false;
-            return;
-        }
-        enemies = waveSpawner.Enemies;
-        if (enemies == null)
-        {
-            Debug.LogError("Enemy List is null");
             enabled = false;
             return;
         }

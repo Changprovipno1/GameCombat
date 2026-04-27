@@ -29,7 +29,7 @@ public class PlayerDamageNearEnemy : MonoBehaviour
             return;
         }
     }
-    public Enemy AutoNearestEnemy()
+    public Enemy GetNearestEnemy()
     {
         Enemy autoTargetEnemy = null;
         float minDistance = float.MaxValue;
@@ -49,7 +49,7 @@ public class PlayerDamageNearEnemy : MonoBehaviour
     }
     public void PrintEnemyNearest()
     {
-        Enemy enemyNearest = AutoNearestEnemy();
+        Enemy enemyNearest = GetNearestEnemy();
         if (enemyNearest == null)
         {
             Debug.Log("No valid enemy found");
