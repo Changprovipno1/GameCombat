@@ -13,26 +13,28 @@ public class PlayerStates : MonoBehaviour
 
     void Awake()
     {
+        if (_waveSpawner == null)
+        {
+            Debug.LogError("WaveSpawner is missing");
+            enabled = false;
+            return;
+        }
+
         _player = GetComponent<Player>();
         if (_player == null)
         {
-            Debug.LogWarning("Player is missing");
+            Debug.LogError("Player is missing");
             enabled = false;
             return;
         }
         _playerAttack = GetComponent<PlayerAttack>();
         if (_playerAttack == null)
         {
-            Debug.LogWarning("PlayerAttack is missing");
+            Debug.LogError("PlayerAttack is missing");
             enabled = false;
             return;
         }
-        if (_waveSpawner == null)
-        {
-            Debug.LogWarning("WaveSpawner is missing");
-            enabled = false;
-            return;
-        }
+
     }
     private enum PlayerState
     {
@@ -40,17 +42,17 @@ public class PlayerStates : MonoBehaviour
         CombatReady,
         Dead
     }
-    private PlayerState CurrentState = PlayerState.Idle;
+    private PlayerState _currentState = PlayerState.Idle;
     public void SyncStateFromPlayer()
     {
         if (_player.IsDead)
         {
-            CurrentState = PlayerState.Dead;
+            _currentState = PlayerState.Dead;
         }
     }
     public void HandleStatePlayer()
     {
-        switch (CurrentState)
+        switch (_currentState)
         {
             case PlayerState.Idle:
                 Debug.Log("Player are not ready to fight");
@@ -68,18 +70,18 @@ public class PlayerStates : MonoBehaviour
     }
     public void HandleInputState()
     {
-        if (CurrentState == PlayerState.Dead)
+        if (_currentState == PlayerState.Dead)
         {
             return;
         }
         if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
         {
-            CurrentState = PlayerState.Idle;
+            _currentState = PlayerState.Idle;
             Debug.Log("Player's state is idle");
         }
         if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
         {
-            CurrentState = PlayerState.CombatReady;
+            _currentState = PlayerState.CombatReady;
             Debug.Log("Player's state is combat");
         }
 
@@ -104,7 +106,7 @@ public class PlayerStates : MonoBehaviour
             Debug.Log("Can't cast skill, player is dead");
             return false;
         }
-        if (CurrentState != PlayerState.CombatReady)
+        if (_currentState != PlayerState.CombatReady)
         {
             Debug.Log("Player is not combat, cannot cast skill");
             return false;
@@ -123,7 +125,7 @@ public class PlayerStates : MonoBehaviour
     }
     public void InputChangeSilenceEffect()
     {
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.V))
         {
             _isSilence = !_isSilence;
             Debug.Log($"Silence is {_isSilence} ");
