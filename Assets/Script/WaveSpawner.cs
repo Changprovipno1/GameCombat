@@ -6,8 +6,6 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] private List<Enemy> _enemies = new List<Enemy>();
     private const int MaxEnemyCount = 5;
     public IReadOnlyList<Enemy> Enemies => _enemies;
-    [SerializeField] private PlayerAttack playerAttack;
-    [SerializeField] private Player player;
 
     public void CleanupDeadEnemy()
     {
