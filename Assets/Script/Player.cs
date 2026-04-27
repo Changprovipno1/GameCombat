@@ -4,7 +4,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private int _maxHP = 100;
     [SerializeField] private int _currentHp;
-    [SerializeField] private int _damage;
+    [SerializeField] private int _damage = 20; // mặc định damage ban đầu là 20
     public int Damage => _damage;
     private bool _isDead;
     public bool IsDead => _isDead;
@@ -13,7 +13,6 @@ public class Player : MonoBehaviour
     private void Start()
     {
         _currentHp = _maxHP;
-        _damage = 20;
     }
     public void TakeDamage(int rawDamage)
     {
@@ -32,21 +31,14 @@ public class Player : MonoBehaviour
     }
     private bool HasReachedDeathThreshold()
     {
-        if (_currentHp <= MinimumHp)
-        {
-            return true;
-        }
-        else
-            return false;
-
+        return _currentHp <= MinimumHp;
     }
      private void ApplyDamage(int incomingDamage)
     {
         _currentHp -= incomingDamage;
-        if (_currentHp <= MinimumHp)
+        if (_currentHp < MinimumHp)
         {
             _currentHp = 0;
-            // return; // dùng để chặn effect mở rộng
         }
     }
     private void Die()
