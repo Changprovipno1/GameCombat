@@ -22,14 +22,14 @@ public class PlayerAttack : MonoBehaviour
         
         if (_waveSpawner == null)
         {
-            Debug.LogWarning("WaveSpawner is missing");
+            Debug.LogError("WaveSpawner is missing");
             enabled = false;
             return;
         }
         _enemies = _waveSpawner.Enemies;
         if (_enemies == null)
         {
-            Debug.LogWarning("List Enemy is null");
+            Debug.LogError("List Enemy is null");
             enabled = false;
             return;
         }
