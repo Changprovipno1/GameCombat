@@ -29,6 +29,7 @@ public class PlayerDamageNearEnemy : MonoBehaviour
             return;
         }
     }
+    
     public Enemy GetNearestEnemy()
     {
         Enemy autoTargetEnemy = null;
@@ -47,6 +48,7 @@ public class PlayerDamageNearEnemy : MonoBehaviour
         }
         return autoTargetEnemy;
     }
+    
     public void PrintEnemyNearest()
     {
         Enemy enemyNearest = GetNearestEnemy();
