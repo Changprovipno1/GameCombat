@@ -1,15 +1,31 @@
+using Assets.Script;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private int _maxHP = 100;
-    [SerializeField] private int _currentHp;
-    [SerializeField] private int _damage = 20; // mặc định damage ban đầu là 20
-    public int Damage => _damage;
+    private int _maxHP = 100;
+    private int _currentHp;
+    private Weapon _weapon;
+    public int Damage => _weapon.Damage;
     private bool _isDead;
     public bool IsDead => _isDead;
+    private WeaponData _weaponData;
+
     private const int MinimumDamage = 0;
     private const int MinimumHp = 0;
+
+    private void Awake()
+    {
+        _weapon = GetComponent<Weapon>();
+        if (_weapon == null)
+        {
+            Debug.LogError("Weapon is missing in Player");
+            enabled = false;
+            return;
+        }
+        _weaponData = new WeaponData("HandGun", 20, 2f);
+        _weapon.Initialize(_weaponData);
+    }
     private void Start()
     {
         _currentHp = _maxHP;
