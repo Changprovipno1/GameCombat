@@ -16,15 +16,27 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        _weapon = GetComponent<Weapon>();
-        if (_weapon == null)
+        AssignDependencies();
+        if (!ValidateDependencies())
         {
-            Debug.LogError("Weapon is missing in Player");
             enabled = false;
             return;
         }
         _weaponData = new WeaponData("HandGun", 20, 2f);
         _weapon.Initialize(_weaponData);
+    }
+    private void AssignDependencies()
+    {
+        _weapon = GetComponent<Weapon>();
+    }
+    private bool ValidateDependencies()
+    {
+        if (_weapon == null)
+        {
+            Debug.LogError("Weapon is missing in Player");
+            return false;
+        }
+        return true;
     }
     private void Start()
     {

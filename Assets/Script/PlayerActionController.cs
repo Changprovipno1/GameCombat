@@ -13,42 +13,54 @@ public class PlayerActionController : MonoBehaviour
 
     void Awake()
     {
-        _playerStates = GetComponent<PlayerStates>();
-        if (_playerStates == null)
+        AssignDependencies();
+        if (!ValidateDependencies())
         {
-            Debug.LogError("PlayerStates is missing");
-            enabled = false;
-            return;
-        }
-        if (waveSpawner == null)
-        {
-            Debug.LogError("WaveSpawner is missing");
-            enabled = false;
-            return;
-        }
-        _playerAttack = GetComponent<PlayerAttack>();
-        if (_playerAttack == null)
-        {
-            Debug.LogError("PlayerAttack is missing");
-            enabled = false;
-            return;
-        }
-        _player = GetComponent<Player>();
-        if (_player == null)
-        {
-            Debug.LogError("Player is missing");
-            enabled = false;
-            return;
-        }
-        _playerDamageNear = GetComponent<PlayerDamageNearEnemy>();
-        if (_playerDamageNear == null)
-        {
-            Debug.LogError("PlayerDamageNearEnemy is missing");
             enabled = false;
             return;
         }
         _enemyData = new EnemyData("Runner", 100, 20);
     }
+    private void AssignDependencies()
+    {
+        _playerStates = GetComponent<PlayerStates>();
+        _playerAttack = GetComponent<PlayerAttack>();
+        _player = GetComponent<Player>();
+        _playerDamageNear = GetComponent<PlayerDamageNearEnemy>();
+    }
+    private bool ValidateDependencies()
+    {
+        if (_playerStates == null)
+        {
+            Debug.LogError("PlayerStates is missing");
+            return false;
+        }
+        if (waveSpawner == null)
+        {
+            Debug.LogError("WaveSpawner is missing");
+            return false;
+        }
+
+        if (_playerAttack == null)
+        {
+            Debug.LogError("PlayerAttack is missing");
+            return false;
+        }
+
+        if (_player == null)
+        {
+            Debug.LogError("Player is missing");
+            return false;
+        }
+
+        if (_playerDamageNear == null)
+        {
+            Debug.LogError("PlayerDamageNearEnemy is missing");
+            return false;
+        }
+        return true;
+    }
+
     void Start()
     {
         Debug.Log("Input Player State (1 - Idle, 2 -  Combat): ");

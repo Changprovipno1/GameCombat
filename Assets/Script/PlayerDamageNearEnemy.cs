@@ -8,28 +8,40 @@ public class PlayerDamageNearEnemy : MonoBehaviour
     [SerializeField] private WaveSpawner _waveSpawner;
     void Awake()
     {
-        _calculate = GetComponent<CalculateDistance>();
-        if (_calculate == null)
+        AssignDependencies();
+        if (!ValidateDependencies())
         {
-            Debug.LogError("CalculateDistance is missing");
             enabled = false;
             return;
+        }
+
+    }
+    private bool ValidateDependencies()
+    {
+        if (_calculate == null)
+        {
+            Debug.LogError("CalculateDistance is missing in PlayerDamageNearEnemy");
+            return false;
         }
         if (_waveSpawner == null)
         {
-            Debug.LogError("WaveSpawner is missing");
-            enabled = false;
-            return;
+            Debug.LogError("WaveSpawner is missing in PlayerDamageNearEnemy");
+            return false;
         }
-        _enemies = _waveSpawner.Enemies;
+
         if (_enemies == null)
         {
             Debug.LogError("Enemy List is null");
-            enabled = false;
-            return;
+            return false;
         }
+        return true;
     }
-    
+    private void AssignDependencies()
+    {
+        _calculate = GetComponent<CalculateDistance>();
+        if (_waveSpawner != null)
+            _enemies = _waveSpawner.Enemies;
+    }
     public Enemy GetNearestEnemy()
     {
         Enemy autoTargetEnemy = null;

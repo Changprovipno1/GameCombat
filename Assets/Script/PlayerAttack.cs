@@ -12,41 +12,49 @@ public class PlayerAttack : MonoBehaviour
 
     private void Awake()
     {
+        AssignDependencies();
+        if (!ValidateDependencies())
+        {
+            enabled = false;
+            return;
+        }
+    }
+    private void AssignDependencies()
+    {
         _player = GetComponent<Player>();
+        _calculate = GetComponent<CalculateDistance>();
+        if (_waveSpawner != null)
+            _enemies = _waveSpawner.Enemies;
+    }
+    private bool ValidateDependencies()
+    {
         if (_player == null)
         {
-            Debug.LogError("Player component is missing");
-            enabled = false;
-            return;
+            Debug.LogError("Player component is missing in PlayerAttack");
+            return false;
         }
-        
         if (_waveSpawner == null)
         {
-            Debug.LogError("WaveSpawner is missing");
-            enabled = false;
-            return;
+            Debug.LogError("WaveSpawner is missing in PlayerAttack");
+            return false;
         }
-        _enemies = _waveSpawner.Enemies;
+
+        if (_calculate == null)
+        {
+            Debug.LogError("CalculateDistance is missing in PlayerAttack");
+            return false;
+        }
         if (_enemies == null)
         {
             Debug.LogError("List Enemy is null");
-            enabled = false;
-            return;
+            return false;
         }
-        _calculate = GetComponent<CalculateDistance>();
-        if (_calculate == null)
-        {
-            Debug.LogError("CalculateDistance is missing");
-            enabled = false;
-            return;
-        }
-        
+        return true;
     }
     private void AttackEnemy(Enemy enemy)
     {
         Debug.Log($"Player attack {enemy.name}");
-        // enemy.TakeDamage(_player.Damage);
-        enemy.TakeDamage(999);
+        enemy.TakeDamage(_player.Damage);
     }
     public bool AttackAllEnemyInRange()
     {

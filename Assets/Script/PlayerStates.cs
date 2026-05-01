@@ -8,32 +8,6 @@ public class PlayerStates : MonoBehaviour
     private bool _isSilence;
     private PlayerAttack _playerAttack;
     [SerializeField] private WaveSpawner _waveSpawner;
-
-    void Awake()
-    {
-        if (_waveSpawner == null)
-        {
-            Debug.LogError("WaveSpawner is missing");
-            enabled = false;
-            return;
-        }
-
-        _player = GetComponent<Player>();
-        if (_player == null)
-        {
-            Debug.LogError("Player is missing");
-            enabled = false;
-            return;
-        }
-        _playerAttack = GetComponent<PlayerAttack>();
-        if (_playerAttack == null)
-        {
-            Debug.LogError("PlayerAttack is missing");
-            enabled = false;
-            return;
-        }
-
-    }
     private enum PlayerState
     {
         Idle,
@@ -41,6 +15,42 @@ public class PlayerStates : MonoBehaviour
         Dead
     }
     private PlayerState _currentState = PlayerState.Idle;
+
+    void Awake()
+    {
+        AssignDependencies();
+        if (!ValidateDependencies())
+        {
+            enabled = false;
+            return;
+        }
+    }
+    private bool ValidateDependencies()
+    {
+        if (_waveSpawner == null)
+        {
+            Debug.LogError("WaveSpawner is missing in PlayerStates");
+            return false;
+        }     
+        if (_player == null)
+        {
+            Debug.LogError("Player is missing in PlayerStates");
+            return false;
+        }
+        
+        if (_playerAttack == null)
+        {
+            Debug.LogError("PlayerAttack is missing in PlayerStates");
+            return false;
+        }
+        return true;
+    }
+    private void AssignDependencies()
+    {
+        _player = GetComponent<Player>();
+        _playerAttack = GetComponent<PlayerAttack>();
+    }
+
     public void SyncStateFromPlayer()
     {
         if (_player.IsDead)
