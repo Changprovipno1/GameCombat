@@ -1,3 +1,5 @@
+using Assets.Script;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +9,7 @@ public class WaveSpawner : MonoBehaviour
     private const int MaxEnemyCount = 5;
     public IReadOnlyList<Enemy> Enemies => _enemies;
 
+    
     public void CleanupDeadEnemy()
     {
         for (int i = _enemies.Count - 1; i >= 0; i--)
@@ -18,15 +21,17 @@ public class WaveSpawner : MonoBehaviour
         }
         ValidateEnemiesList();
     }
-    public void SpawnWave(Enemy enemyInput)
+    
+    public void SpawnWave(EnemyData enemyData, Enemy enemyInput)
     {
-        // check enemy thêm vào có trống thì k thêm nữa
+        // check model enemy trống thì k thêm nữa
         if (enemyInput == null)
         {
             Debug.Log("Enemy is null");
             return;
         }
         CleanupDeadEnemy();
+        
         if (_enemies.Count >= MaxEnemyCount)
         {
             Debug.Log("Enemy Count >= 5");
@@ -36,11 +41,31 @@ public class WaveSpawner : MonoBehaviour
         int enemiesLeftToSpawn = MaxEnemyCount - Enemies.Count;
         while (currentSpawnEnemy < enemiesLeftToSpawn)
         {
-            _enemies.Add(Instantiate(enemyInput, transform.position, Quaternion.identity));
+            Enemy enemySpawn = Instantiate(enemyInput, transform.position, Quaternion.identity);
+            Debug.Log(enemySpawn.GetHashCode());
+            enemySpawn.Initialize(enemyData);
+            _enemies.Add(enemySpawn);
             Debug.Log($"a enemy is created, current Enemy spawn: {currentSpawnEnemy}");
             currentSpawnEnemy++;
         }
         ValidateEnemiesList();
+    }
+    public void PrintList()
+    {
+        if (!HasEnemyInList())
+        {
+            Debug.Log("No enemy in list");
+            return;
+        }
+        for (int i = 0; i < _enemies.Count; i++)
+        {
+            Enemy enemy = _enemies[i];
+            Debug.Log($"{enemy.name} in list");
+        }
+    }
+    bool HasEnemyInList()
+    {
+        return _enemies.Count > 0;
     }
     private void ValidateEnemiesList()
     {
