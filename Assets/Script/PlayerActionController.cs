@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Assets.Script;
 using UnityEngine;
 
 public class PlayerActionController : MonoBehaviour
@@ -9,7 +9,7 @@ public class PlayerActionController : MonoBehaviour
     [SerializeField] private Enemy _enemy;
     private PlayerStates _playerStates;
     private PlayerDamageNearEnemy _playerDamageNear;
-
+    private EnemyData _enemyData;
 
     void Awake()
     {
@@ -47,6 +47,7 @@ public class PlayerActionController : MonoBehaviour
             enabled = false;
             return;
         }
+        _enemyData = new EnemyData("Runner", 100, 20);
     }
     void Start()
     {
@@ -61,6 +62,11 @@ public class PlayerActionController : MonoBehaviour
     }
     void HandleInput()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log("P pressed - spawn request");
+            waveSpawner.SpawnWave(_enemyData, _enemy);
+        }
         _playerStates.SyncStateFromPlayer();
         _playerStates.HandleInputState();
         if (Input.GetKeyDown(KeyCode.E))
@@ -72,11 +78,7 @@ public class PlayerActionController : MonoBehaviour
         {
             _playerStates.HandleCastSkill();
         }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Debug.Log("P pressed - spawn request");
-            waveSpawner.SpawnWave(_enemy);
-        }
+
         if (Input.GetKeyDown(KeyCode.Z))
         {
             _playerDamageNear.PrintEnemyNearest();
