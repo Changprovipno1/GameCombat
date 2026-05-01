@@ -1,32 +1,42 @@
+using Assets.Script;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private int _maxHp = 100;
-    [SerializeField] private int _currentHp;
+    private int _currentHp;
     private bool _isDead;
+    private EnemyData _enemyData;
+
     public bool IsDead => _isDead;
+    public int MaxHp => _enemyData.MaxHp;
+    public int CurrentHp => _currentHp;
+
     private const int MinimumDamage = 0;
     private const int MinimumHp = 0;
-    void Start()
+
+    public void Initialize(EnemyData data)
     {
-        _currentHp = _maxHp;
+        _enemyData = data;
+        _currentHp = data.MaxHp;
+        _isDead = false;
     }
 
     public void TakeDamage(int rawDamage)
     {
+        
         if (rawDamage <= MinimumDamage) return;
         if (IsDead)
         {
             Debug.Log($"Enemy is already dead");
             return;
         }
-        ApplyDamage(rawDamage);
         Debug.Log($"Taking Damage : {rawDamage}");
+        ApplyDamage(rawDamage);
         if (HasReachedDeathThreshold())
         {
             Die();
         }
+        PrintEnemyInfo();
     }
     private bool HasReachedDeathThreshold()
     {
@@ -44,20 +54,14 @@ public class Enemy : MonoBehaviour
     {
         if (IsDead) return;
         _isDead = true;
-        Debug.Log($"Enemy is dead");
+        Debug.Log("Enemy is dead");
     }
    
-    public void PrintEnemyInfo()
+    private void PrintEnemyInfo()
     {
-        string status = "";
-        if (IsDead)
-        {
-            status = "Dead";
-        }
-        else
-        {
-            status = "Alive";
-        }
-        Debug.Log($" CurrentHp = {_currentHp} | MaxHP = {_maxHp} | Status: {status}");
+        string status = IsDead ? "Dead" : "Live";
+        Debug.Log($" CurrentHp = {CurrentHp} | MaxHP = {MaxHp} | Status: {status}");
     }
+
+        
 }
