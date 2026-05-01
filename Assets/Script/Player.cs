@@ -3,13 +3,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private int _maxHP = 100;
+    private PlayerData _playerData;
+    public int MaxHp => _playerData.MaxHp;
     private int _currentHp;
     private Weapon _weapon;
+
     public int Damage => _weapon.Damage;
     private bool _isDead;
     public bool IsDead => _isDead;
-    private WeaponData _weaponData;
 
     private const int MinimumDamage = 0;
     private const int MinimumHp = 0;
@@ -22,26 +23,25 @@ public class Player : MonoBehaviour
             enabled = false;
             return;
         }
-        _weaponData = new WeaponData("HandGun", 20, 2f);
-        _weapon.Initialize(_weaponData);
     }
     private void AssignDependencies()
     {
         _weapon = GetComponent<Weapon>();
     }
+
     private bool ValidateDependencies()
     {
-        if (_weapon == null)
-        {
-            Debug.LogError("Weapon is missing in Player");
-            return false;
-        }
+        
         return true;
     }
-    private void Start()
+    public void Initialize(PlayerData dataPlayer, WeaponData dataWeapon)
     {
-        _currentHp = _maxHP;
+        _playerData = dataPlayer;
+        _currentHp = dataPlayer.MaxHp;
+        _isDead = false;
+        _weapon.Initialize(dataWeapon);
     }
+
     public void TakeDamage(int rawDamage)
     {
         if (rawDamage <= MinimumDamage) return;
@@ -90,9 +90,9 @@ public class Player : MonoBehaviour
 
         _currentHp += amountHp;
         Debug.Log($"Heal : {amountHp}");
-        if (_currentHp > _maxHP)
+        if (_currentHp > MaxHp)
         {
-            _currentHp = _maxHP;
+            _currentHp = MaxHp;
         }
 
     }
@@ -108,6 +108,6 @@ public class Player : MonoBehaviour
         {
             status = "Alive";
         }
-        Debug.Log($" CurrentHp = {_currentHp} | Max HP = {_maxHP} | Status: {status}");
+        Debug.Log($" CurrentHp = {_currentHp} | Max HP = {MaxHp} | Status: {status}");
     }
 }
