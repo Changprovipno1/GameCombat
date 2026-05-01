@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerStates : MonoBehaviour
@@ -97,7 +95,7 @@ public class PlayerStates : MonoBehaviour
         }
         _lastAttackTime = Time.time;
         _waveSpawner.CleanupDeadEnemy();
-
+        _waveSpawner.PrintList();
     }
     private bool CanCastSkill()
     {

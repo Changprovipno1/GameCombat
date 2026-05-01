@@ -45,7 +45,8 @@ public class PlayerAttack : MonoBehaviour
     private void AttackEnemy(Enemy enemy)
     {
         Debug.Log($"Player attack {enemy.name}");
-        enemy.TakeDamage(_player.Damage);
+        // enemy.TakeDamage(_player.Damage);
+        enemy.TakeDamage(999);
     }
     public bool AttackAllEnemyInRange()
     {
