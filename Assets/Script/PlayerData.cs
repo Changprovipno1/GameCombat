@@ -13,15 +13,15 @@ namespace Assets.Script
                 Console.WriteLine($"MaxHp invalid ({maxHp}), clamped to 1");
                 maxHp = 1;
             }
-            if (attackRange < 0)
+            if (attackRange <= 0)
             {
                 Console.WriteLine($"AttackRange invalid ({attackRange}), clamped to 1");
-                attackRange = 0;
+                attackRange = 1;
             }
             if (attackCoolDown <= 0)
             {
-                Console.WriteLine($"AttackCooldown invalid ({attackCoolDown}), clamped to 1");
-                attackCoolDown = 0;
+                Console.WriteLine($"AttackCooldown invalid ({attackCoolDown}), clamped to 0.1f");
+                attackCoolDown = 0.1f;
             }
             MaxHp = maxHp;
             AttackCooldown = attackCoolDown;
