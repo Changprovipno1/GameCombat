@@ -1,6 +1,4 @@
 using Assets.Script;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bootstrap : MonoBehaviour
@@ -16,10 +14,13 @@ public class Bootstrap : MonoBehaviour
             enabled = false;
             return;
         }
+    }
+    void Start()
+    {
+        
         _playerData = new PlayerData(100, 2f, 2f);
         _weaponData = new WeaponData("HandGun", 20, 2f);
         _player.Initialize(_playerData, _weaponData);
-        
     }
     private bool ValidateDependencies()
     {
