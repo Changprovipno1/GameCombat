@@ -1,4 +1,5 @@
-﻿namespace Assets.Script
+﻿using System;
+namespace Assets.Script
 {
     public class EnemyData
     {
@@ -8,9 +9,9 @@
 
         public EnemyData(string enemyName, int maxHp, int damage)
         {
-            MaxHp = maxHp;
+            MaxHp = maxHp <= 0 ? 1 : maxHp;
             EnemyName = enemyName;
-            Damage = damage;
+            Damage = Math.Max(0, damage);
         }
     }
 }
