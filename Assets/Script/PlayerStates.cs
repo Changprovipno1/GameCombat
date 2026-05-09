@@ -1,8 +1,9 @@
+using Assets.Script;
 using UnityEngine;
 
 public class PlayerStates : MonoBehaviour
 {
-    private const float AttackCooldown = 2f;
+    private float AttackCooldown => _player.AttackCooldown;
     private float _lastAttackTime;
     private Player _player;
     private bool _isSilence;
@@ -15,7 +16,13 @@ public class PlayerStates : MonoBehaviour
         Dead
     }
     private PlayerState _currentState = PlayerState.Idle;
+    private static float _globalCooldownMultiplier;
 
+    public static float GlobalCooldownMultiplier
+    {
+        get => _globalCooldownMultiplier;
+        private set => _globalCooldownMultiplier = 1f;
+    }
     void Awake()
     {
         AssignDependencies();
@@ -58,7 +65,7 @@ public class PlayerStates : MonoBehaviour
             _currentState = PlayerState.Dead;
         }
     }
-    public void HandleStatePlayer()
+    public void ToggleStatePlayer()
     {
         switch (_currentState)
         {
@@ -94,6 +101,20 @@ public class PlayerStates : MonoBehaviour
         }
 
     }
+
+    public void TestKillEnemy()
+    {
+        bool hasHitNearEnemy = _playerAttack.AttackAllEnemyInRange();
+
+        if (!hasHitNearEnemy)
+        {
+            Debug.Log("No enemy in range, skill failed");
+            return;
+        }
+        _waveSpawner.CleanupDeadEnemy();
+        _waveSpawner.PrintList();
+    }
+
     public void HandleCastSkill()
     {   if (!CanCastSkill()) return;
         bool hasHitNearEnemy = _playerAttack.AttackAllEnemyInRange();
@@ -109,6 +130,7 @@ public class PlayerStates : MonoBehaviour
     }
     private bool CanCastSkill()
     {
+        float _effectiveCooldown = AttackCooldown * GlobalCooldownMultiplier;
         if (_player.IsDead)
         {
             Debug.Log("Can't cast skill, player is dead");
@@ -124,7 +146,7 @@ public class PlayerStates : MonoBehaviour
             Debug.Log("Player is Silence, cannot cast skill");
             return false;
         }
-        if (Time.time - _lastAttackTime < AttackCooldown)
+        if (Time.time - _lastAttackTime < _effectiveCooldown )
         {
             Debug.Log("Player is CoolDown, cannot cast skill");
             return false;
@@ -140,4 +162,20 @@ public class PlayerStates : MonoBehaviour
         }
 
     }
+
+    //const k thuộc instance, cũng k thuộc về class, nó giống static 
+    public void ToggleMultiplier()
+    {
+        if (GlobalCooldownMultiplier == 1f)
+        {
+            GlobalCooldownMultiplier = 0.5f;
+            Debug.Log("GlobalCooldownMultiplier = 0.5f");
+        }
+        else
+        {
+            GlobalCooldownMultiplier = 1f;
+            Debug.Log("GlobalCooldownMultiplier = 1f");
+        }
+    }
+
 }

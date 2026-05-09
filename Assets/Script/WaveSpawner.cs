@@ -1,5 +1,4 @@
 using Assets.Script;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,16 +11,45 @@ public class WaveSpawner : MonoBehaviour
     
     public void CleanupDeadEnemy()
     {
+        
         for (int i = _enemies.Count - 1; i >= 0; i--)
         {
-            if (_enemies[i] == null || _enemies[i].IsDead)
+            if (_enemies[i] == null)
             {
                 _enemies.RemoveAt(i);
+            }
+            else if (_enemies[i].IsDead)
+            {
+                Enemy enemyToDestroy = _enemies[i];
+                _enemies.RemoveAt(i);
+                Destroy(enemyToDestroy.gameObject);
+                CombatStatTracker.RecordKillThisSession();
             }
         }
         ValidateEnemiesList();
     }
     
+    public int CountEnemiesAlive()
+    {
+        int CountAllEnemiesAlive = 0;
+        foreach (var enemy in Enemies)
+        {
+            if (enemy.IsDead) continue;
+            CountAllEnemiesAlive++;
+        }
+        return CountAllEnemiesAlive;
+    }
+    public int CountEnemiesDead()
+    {
+        int CountAllEnemiesDead = 0;
+        foreach (var enemy in Enemies)
+        {
+            if (!enemy.IsDead) continue;
+            CountAllEnemiesDead++;
+        }
+        return CountAllEnemiesDead;
+    }
+
     public void SpawnWave(EnemyData enemyData, Enemy enemyInput)
     {
         // check model enemy trống thì k thêm nữa

@@ -6,6 +6,7 @@ public class Bootstrap : MonoBehaviour
     private PlayerData _playerData;
     [SerializeField] private Player _player;
     private WeaponData _weaponData;
+    private PlayerHealthSystem _playerHealthSystem;
 
     void Awake()
     {
@@ -20,7 +21,8 @@ public class Bootstrap : MonoBehaviour
         
         _playerData = new PlayerData(100, 2f, 2f);
         _weaponData = new WeaponData("HandGun", 20, 2f);
-        _player.Initialize(_playerData, _weaponData);
+        _playerHealthSystem = new PlayerHealthSystem(_playerData.MaxHp);
+        _player.Initialize(_playerData, _weaponData, _playerHealthSystem);
     }
     private bool ValidateDependencies()
     {

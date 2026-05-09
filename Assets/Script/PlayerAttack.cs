@@ -1,14 +1,14 @@
+using Assets.Script;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
     private Player _player;
-    private const float AttackRange = 5f;
     private IReadOnlyList<Enemy> _enemies;
     [SerializeField] private WaveSpawner _waveSpawner;
     private CalculateDistance _calculate;
-    private const float AttackRangeSqr = AttackRange * AttackRange;
+    private float AttackRange => _player.AttackRange;
 
     private void Awake()
     {
@@ -53,27 +53,38 @@ public class PlayerAttack : MonoBehaviour
     }
     private void AttackEnemy(Enemy enemy)
     {
+        // lấy trạng thái trước đó của enemy
+        bool wasAliveBeforeHit = !enemy.IsDead;
         Debug.Log($"Player attack {enemy.name}");
         enemy.TakeDamage(_player.Damage);
+        CombatStatTracker.RecordDamage(_player.Damage);
+        if (wasAliveBeforeHit && enemy.IsDead)
+        {
+            CombatStatTracker.RecordKillWave();
+        }
     }
+
     public bool AttackAllEnemyInRange()
     {
+        float attackRangeSqr = AttackRange * AttackRange;
         bool hasHitEnemy = false;
         if (_player.IsDead)
         {
              return false;
         }
-        for (int i = 0; i<  _enemies.Count; i++)
+        for (int i = 0; i <  _enemies.Count; i++)
         {
             Enemy enemyTarget = _enemies[i];
-            if(!IsValidTarget(enemyTarget)) { continue; }
+            if(!IsValidTarget(enemyTarget, attackRangeSqr)) { continue; }
             AttackEnemy(enemyTarget);
             hasHitEnemy = true;
-
+            enemyTarget.PrintEnemyInfo();
          }
         return hasHitEnemy;
      }
-    private bool IsValidTarget(Enemy enemyTarget)
+
+
+    private bool IsValidTarget(Enemy enemyTarget, float attackRangeSqr)
     { 
         if (enemyTarget == null) 
         {
@@ -85,11 +96,10 @@ public class PlayerAttack : MonoBehaviour
             return false;
         }
         float distance = _calculate.GetSqrDistanceToPlayer(enemyTarget);
-        if (distance > AttackRangeSqr)
+        if (distance > attackRangeSqr)
         {
             return false;
         }
         return true;
     }
-
 }

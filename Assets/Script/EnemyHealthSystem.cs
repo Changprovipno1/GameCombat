@@ -3,7 +3,7 @@
 
 namespace Assets.Script
 {
-    internal class EnemyHealthSystem
+    public class EnemyHealthSystem
     {
         // field
         private int _currentHp;
@@ -16,12 +16,11 @@ namespace Assets.Script
             private set => _currentHp = Math.Min(MaxHp, Math.Max(0, value));
         }
         public int MaxHp => _maxHp;
-        public bool IsDead => CurrentHp <= MinimumHp;
+        public bool IsDead => CurrentHp == 0;
         public float HpRatio => (float) CurrentHp / MaxHp;
 
         // magic number
         private const int MinimumDamage = 0;
-        private const int MinimumHp = 0;
 
         public EnemyHealthSystem(int maxHp)
         {
