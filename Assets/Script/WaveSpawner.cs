@@ -59,7 +59,7 @@ public class WaveSpawner : MonoBehaviour
             return;
         }
         CleanupDeadEnemy();
-        
+
         if (_enemies.Count >= MaxEnemyCount)
         {
             Debug.Log("Enemy Count >= 5");
@@ -69,11 +69,9 @@ public class WaveSpawner : MonoBehaviour
         int enemiesLeftToSpawn = MaxEnemyCount - Enemies.Count;
         while (currentSpawnEnemy < enemiesLeftToSpawn)
         {
-            Enemy enemySpawn = Instantiate(enemyInput, transform.position, Quaternion.identity);
-            Debug.Log(enemySpawn.GetHashCode());
+            Enemy enemySpawn = EnemyFactory.Create(enemyInput, enemyInput.transform.position);
             enemySpawn.Initialize(enemyData);
             _enemies.Add(enemySpawn);
-            Debug.Log($"a enemy is created, current Enemy spawn: {currentSpawnEnemy}");
             currentSpawnEnemy++;
         }
         ValidateEnemiesList();
