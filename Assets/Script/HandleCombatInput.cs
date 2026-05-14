@@ -38,7 +38,7 @@ public class HandleCombatInput : MonoBehaviour
         _playerStates.HandleInputState();
         if (Input.GetKeyDown(ToggleCombatStateKey))
         {
-            _playerStates.ToggleStatePlayer();
+            _playerStates.LogStatePlayer();
         }
 
         _playerStates.InputChangeSilenceEffect();

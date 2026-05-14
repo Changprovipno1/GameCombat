@@ -2,14 +2,6 @@
 
 namespace Assets.Script
 {
-    /*
-     * Tạo static class EnemyFactory với method: 
-        Enemy Create(Enemy prefab, Vector3 position). 
-        Method này: Instantiate enemy, tăng TotalEnemiesCreated, log ra console, trả về Enemy instance. 
-        Refactor WaveSpawner.SpawnWave để gọi EnemyFactory.
-        Create thay vì Instantiate trực tiếp. 
-
-     */
     public static class EnemyFactory
     {
         private static int _totalEnemiesCreated = 0;
