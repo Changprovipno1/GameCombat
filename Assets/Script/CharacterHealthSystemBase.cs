@@ -27,7 +27,7 @@ namespace Assets.Script
             CurrentHp = _maxHp;
         }
 
-        public void TakeDamage(int rawDamage)
+        public virtual void TakeDamage(int rawDamage)
         {
             if (rawDamage <= MinimumDamage || IsDead) return;
             ApplyDamage(rawDamage);

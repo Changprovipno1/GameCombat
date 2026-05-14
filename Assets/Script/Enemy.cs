@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-
-    private EnemyHealthSystem _enemyHealthSystem;
+    private CharacterHealthSystemBase _characterHealthSystemBase;
 
     public bool IsDead
     {
@@ -15,7 +14,7 @@ public class Enemy : MonoBehaviour
                 Debug.LogError("EnemyHealthSystem is not initialized");
                 return true;
             }
-            return _enemyHealthSystem.IsDead;
+            return _characterHealthSystemBase.IsDead;
         }
     }
 
@@ -26,11 +25,17 @@ public class Enemy : MonoBehaviour
             Debug.LogError("EnemyData is not initialized");
             return;
         }
-        _enemyHealthSystem = new EnemyHealthSystem(data.MaxHp);
+        //_characterHealthSystemBase = new EnemyHealthSystem(data.MaxHp);
+        _characterHealthSystemBase = new EliteEnemyHealthSystem(data.MaxHp, 5);
+
     }
     private bool IsReady()
     {
-        if (_enemyHealthSystem == null)
+        if (_characterHealthSystemBase == null)
+        {
+            return false;
+        }
+        if (_characterHealthSystemBase == null)
         {
             return false;
         }
@@ -39,11 +44,11 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int rawDamage)
     {
         if (!IsReady()) return;
-        _enemyHealthSystem.TakeDamage(rawDamage);
+        _characterHealthSystemBase.TakeDamage(rawDamage);
     }
     public void PrintEnemyInfo()
     {
         if (!IsReady()) return;
-        DebugOverlay.LogStatus(_enemyHealthSystem.CurrentHp, _enemyHealthSystem.MaxHp, _enemyHealthSystem.IsDead);
+        DebugOverlay.LogStatus(_characterHealthSystemBase.CurrentHp, _characterHealthSystemBase.MaxHp, _characterHealthSystemBase.IsDead);
     }
 }
